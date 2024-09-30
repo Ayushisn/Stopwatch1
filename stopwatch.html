@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+body {
+    background-color: #1e1e2f;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.stopwatch-container {
+    background-color: #282a36;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+h1 {
+    margin: 0 0 20px;
+}
+
+.display {
+    font-size: 3em;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #44475a;
+    border-radius: 5px;
+    border: 2px solid #6272a4;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #6272a4;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #50fa7b;
+}
+
+#lap-container {
+    text-align: left;
+    margin-top: 20px;
+}
+
+#lap-container h3 {
+    margin: 0 0 10px;
+}
+
+#laps {
+    list-style: none;
+    padding: 0;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+#laps li {
+    background-color: #44475a;
+    margin: 5px 0;
+    padding: 5px 10px;
+    border-radius: 3px;
+}
+</style>
+    <title>Stopwatch Web Application</title>
+</head>
+<body>
+    <div class="stopwatch-container">
+        <h1>Stopwatch</h1>
+        <div id="display" class="display">00:00:00</div>
+        <div class="buttons">
+            <button id="startPauseBtn">Start</button>
+            <button id="resetBtn">Reset</button>
+        </div>
+        <div id="lap-container">
+            <h3>Laps</h3>
+            <ul id="laps"></ul>
+        </div>
+    </div>
+    <script>
+let hours = 0;
+let minutes = 0;
+let seconds = 0;
+let isRunning = false;
+let interval;
+
+function updateDisplay() {
+    const display = document.getElementById('display');
+    display.innerText = 
+        (hours < 10 ? "0" + hours : hours) + ":" + 
+        (minutes < 10 ? "0" + minutes : minutes) + ":" + 
+        (seconds < 10 ? "0" + seconds : seconds);
+}
+
+function startPauseStopwatch() {
+    if (isRunning) {
+        clearInterval(interval);
+        document.getElementById('startPauseBtn').innerText = "Start";
+    } else {
+        interval = setInterval(() => {
+            seconds++;
+            if (seconds === 60) {
+                seconds = 0;
+                minutes++;
+            }
+            if (minutes === 60) {
+                minutes = 0;
+                hours++;
+            }
+            updateDisplay();
+        }, 1000);
+        document.getElementById('startPauseBtn').innerText = "Pause";
+    }
+    isRunning = !isRunning;
+}
+
+function resetStopwatch() {
+    clearInterval(interval);
+    isRunning = false;
+    hours = 0;
+    minutes = 0;
+    seconds = 0;
+    updateDisplay();
+    document.getElementById('startPauseBtn').innerText = "Start";
+    document.getElementById('laps').innerHTML = ''; // Clear lap times
+}
+
+// Event listeners for buttons
+document.getElementById('startPauseBtn').addEventListener('click', startPauseStopwatch);
+document.getElementById('resetBtn').addEventListener('click', resetStopwatch);
+
+    </script>
+</body>
+</html>
